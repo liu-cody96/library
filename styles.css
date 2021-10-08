@@ -17,7 +17,6 @@
   .form-container {
     position: relative;
     text-align: center;
-    overflow: scroll;
     width: 100%;
   }
   .formPopup {

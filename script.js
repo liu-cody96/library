@@ -1,6 +1,7 @@
 
 //////////// class definitions //////////
 class Book {
+
     constructor(title, author, numPages, read) {
         this.title = title;
         this.author = author;
@@ -14,12 +15,6 @@ class Book {
         this.changeReadStatus = function() {
             this.read = !this.read;
         };
-        this.equals = function(otherBook) {
-            return this.title === otherBook.title
-            && this.author === otherBook.author
-            && this.numPages === otherBook.numPages
-            && this.read === otherBook.read;
-        }
     }
 
 };
@@ -27,8 +22,11 @@ class Book {
 
 //////// global variables////////
 
-let myLibrary = [new Book("hi", "hi", 4, true), new Book("no", "no", 14, false)];
+let myLibrary = [];
+
 const bookContainer = document.getElementById("books-container");
+const formDiv = document.getElementById("popupForm");
+const realForm = document.querySelector("form");
 ////////////////////////////////
 
 // function declarations and implementations /////
@@ -38,19 +36,21 @@ function addBookToLibrary(userTitle, userAuthor, userNumPages, userRead) {
 };
 
 function openForm() {
-    document.getElementById("popupForm").style.display = "block";
+    formDiv.style.display = "block";
 };
 
 function closeForm() {
-    document.getElementById("popupForm").style.display = "none";
+    realForm.elements[0].value = '';
+    realForm.elements[1].value = '';
+    realForm.elements[2].value = '';
+    realForm.elements[3].checked = false;
+    realForm.elements[4].checked = false;
+
+    formDiv.style.display = "none";
 };
 
 function userAddBook() {
-    const submitted = document.querySelector("form");
-    for (let i = 0; i < submitted.length; i++) {
-        console.log(submitted.elements[i].value);
-    }
-    let formValues = submitted.elements;
+    let formValues = realForm.elements;
     userTitle = formValues[0].value;
     userAuthor = formValues[1].value;
     userNumPages = formValues[2].value;
@@ -67,7 +67,7 @@ function displayBooks() {
 
         /* create book HTML */
         const bookElement = document.createElement("div");
-        bookElement.id = "book" + String(currId);
+        bookElement.setAttribute('data-library', currId++);
         bookElement.className = "book-card";
         const title = document.createElement("p");
         title.innerHTML = "Title: " + book.title;
@@ -79,7 +79,6 @@ function displayBooks() {
         readStatus.innerHTML = book.read ? "Mark as Read" : "Mark as Unread";
         const removeButton = document.createElement("button");
         removeButton.innerHTML = "Remove";
-        /* * * * * * * * * */
 
         /* add book element to HTML */
         bookElement.appendChild(title);
@@ -88,7 +87,6 @@ function displayBooks() {
         bookElement.appendChild(readStatus);
         bookElement.appendChild(removeButton);
         bookContainer.appendChild(bookElement);
-        /* * * * * * * * * * * * * */
 
         /* toggle readStatus whenever button is clicked */
         readStatus.addEventListener('click', () => {
@@ -96,23 +94,28 @@ function displayBooks() {
             readStatus.innerHTML = book.read ? "Mark as Read" : "Mark as Unread";
         });
 
+        /* logic for removing a book when the remove button is clicked */
         removeButton.addEventListener('click', () => {
-            let id = Number(bookElement.id.charAt(bookElement.id.length-1));
-            myLibrary.splice(currId, 1); // removes this book from library
+            let bookId = Number(bookElement.getAttribute('data-library'));
+            for (let i = 0; i < myLibrary.length; ++i) {
+                if (bookId === i) {
+                    myLibrary.splice(i, 1);
+                    break;
+                }
+            }
+
             bookElement.remove();
+
+            /* renumber book data attributes after removing to ensure the next removal will be the correct book */
+            let books = document.querySelectorAll('div.book-card');
+            let newId = 0;
+            for (let newBook of books) {
+                newBook.setAttribute('data-library', newId++);
+            }
+
         });
-        /* * * * * * * * * * * * * * * * * * * * * * * */
 
         ++currId;
     }
 }
-///////////////////////////////////////////////
-
-
-
-///////////////// event handling /////////////
-const bookSubmission = document.querySelector("form").addEventListener("submit", () => {
-    console.log("submitted!")
-});
-
 ///////////////////////////////////////////////
