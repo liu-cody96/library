@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<!-- The DOM -->
+<body>
+    <div id="new-book-button">
+        <button onclick="openForm()" id="new-book-button">Add Book</button>
+    </div>
+
+    <div class="form-container">
+        <div class="formPopup" id="popupForm">
+
+            <form class="formContainer" id="form-input">
+              <label for="book-title">
+                <strong>Title</strong>
+              </label>
+              <input type="text" id="email" placeholder="Enter title here..." name="book-title" required>
+              <label for="book-author">
+                <strong>Author</strong>
+              </label>
+              <input type="text" id="psw" placeholder="Enter author here..." name="book-author" required>
+              <label for="num-pages">
+                  <strong>Number of Pages</strong>
+              </label>
+              <input type="number" id="numPages" placeholder="Enter the number of pages here...." name="num-pages" required>
+              <label for="book-read">
+                <strong>Have you read this book before?</strong>
+              </label><br>
+              <input type="radio" id="yes-read" name="book-read" value="Yes" required>
+              <label for="yes-read">Yes</label><br>
+              <input type="radio" id="not-read" name="book-read" value="No">
+              <label for="not-read">No</label><br>
+              <button type="button" class="btn" onclick="userAddBook()">Add Book</button>
+              <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+          </form>
+        </div>
+
+      </div>
+
+    <div id="books-container"></div>
+</body>
+
+</html>
