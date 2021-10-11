@@ -27,6 +27,7 @@ let myLibrary = [];
 const bookContainer = document.getElementById("books-container");
 const formDiv = document.getElementById("popupForm");
 const realForm = document.querySelector("form");
+const mainContainer = document.querySelector(".main-container");
 ////////////////////////////////
 
 // function declarations and implementations /////
@@ -37,6 +38,7 @@ function addBookToLibrary(userTitle, userAuthor, userNumPages, userRead) {
 
 function openForm() {
     formDiv.style.display = "block";
+    mainContainer.style.filter = "blur(3px)";
 };
 
 function closeForm() {
@@ -47,6 +49,7 @@ function closeForm() {
     realForm.elements[4].checked = false;
 
     formDiv.style.display = "none";
+    mainContainer.style.filter = "";
 };
 
 function userAddBook() {
@@ -56,6 +59,7 @@ function userAddBook() {
     userNumPages = formValues[2].value;
     userRead = formValues[3].checked ? true : false;
 
+    document.querySelector('div#books-container').innerHTML = '';
     addBookToLibrary(userTitle, userAuthor, userNumPages, userRead);
     displayBooks();
     closeForm();
@@ -67,7 +71,7 @@ function displayBooks() {
 
         /* create book HTML */
         const bookElement = document.createElement("div");
-        bookElement.setAttribute('data-library', currId++);
+        bookElement.setAttribute('data-library', currId);
         bookElement.className = "book-card";
         const title = document.createElement("p");
         title.innerHTML = "Title: " + book.title;
@@ -76,7 +80,7 @@ function displayBooks() {
         const numBookPages = document.createElement("p");
         numBookPages.innerHTML = "Length: " + String(book.numPages) + " pages";
         const readStatus = document.createElement("button");
-        readStatus.innerHTML = book.read ? "Mark as Read" : "Mark as Unread";
+        readStatus.innerHTML = book.read ? "Mark as Unread" : "Mark as Read";
         const removeButton = document.createElement("button");
         removeButton.innerHTML = "Remove";
 
@@ -91,7 +95,7 @@ function displayBooks() {
         /* toggle readStatus whenever button is clicked */
         readStatus.addEventListener('click', () => {
             book.changeReadStatus();
-            readStatus.innerHTML = book.read ? "Mark as Read" : "Mark as Unread";
+            readStatus.innerHTML = book.read ? "Mark as Unread" : "Mark as Read";
         });
 
         /* logic for removing a book when the remove button is clicked */
@@ -100,6 +104,7 @@ function displayBooks() {
             for (let i = 0; i < myLibrary.length; ++i) {
                 if (bookId === i) {
                     myLibrary.splice(i, 1);
+                    console.log("removed at index" + String(i));
                     break;
                 }
             }
