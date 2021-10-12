@@ -34,25 +34,25 @@
       <div class="formPopup" id="popupForm">
 
           <form class="formContainer" id="form-input">
-            <label for="book-title">
-              Title
-            </label>
-            <input type="text" id="email" placeholder="Enter title here..." name="book-title" required>
-            <label for="book-author">
-              Author
-            </label>
-            <input type="text" id="psw" placeholder="Enter author here..." name="book-author" required>
-            <label for="num-pages">
-                Number of Pages
-            </label>
-            <input type="number" id="numPages" placeholder="Enter the number of pages here..." name="num-pages" required>
-            <label for="book-read">
-              Have you read this book before?
-            </label><br>
-            <input type="radio" id="yes-read" name="book-read" value="Yes" required>
-            <label for="yes-read">Yes</label><br>
+            <label for="book-title">Title</label>
+            <input type="text" id="book-title" placeholder="Enter title here..." name="book-title">
+            <small class="err-msg">* required</small>
+
+            <label for="book-author">Author</label>
+            <input type="text" id="psw" placeholder="Enter author here..." name="book-author">
+            <small class="err-msg">* required</small>
+
+            <label for="num-pages">Number of Pages</label>
+            <input type="number" id="numPages" placeholder="Enter the number of pages here..." name="num-pages">
+            <small class="err-msg">* invalid input</small>
+
+            <label for="book-read">Have you read this book before?</label><br>
+            <input type="radio" id="yes-read" name="book-read" value="Yes">
+            <label for="yes-read">Yes</label>
             <input type="radio" id="not-read" name="book-read" value="No">
-            <label for="not-read">No</label><br>
+            <label for="not-read">No</label>
+            <small class="err-msg-radio">* required</small>
+
             <button type="button" class="add-book" onclick="userAddBook()">Add Book</button>
             <span class="close" onclick="closeForm()"> X </span>
         </form>

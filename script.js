@@ -28,9 +28,64 @@ const bookContainer = document.getElementById("books-container");
 const formDiv = document.getElementById("popupForm");
 const realForm = document.querySelector("form");
 const mainContainer = document.querySelector(".main-container");
+
+const requiredMessages = document.querySelectorAll(".err-msg");
+const requiredMessageRadio = document.querySelector(".err-msg-radio");
 ////////////////////////////////
 
 // function declarations and implementations /////
+
+function getNumValidInputs() {
+    let numValid = 0;
+
+    if (realForm.elements[0].value === '') {
+        requiredMessages[0].style.display = 'block';
+    }
+    else {
+        requiredMessages[0].style.display = 'none';
+        numValid += 1;
+    }
+
+    if (realForm.elements[1].value === '') {
+        requiredMessages[1].style.display = 'block';
+    }
+    else {
+        requiredMessages[1].style.display = 'none';
+        numValid += 1;
+    }
+
+    if (realForm.elements[2].value === '' || !(isNaN(typeof realForm.elements[2].value))) {
+        requiredMessages[2].style.display = 'block';
+        console.log(typeof realForm.elements[2].value);
+    }
+    else {
+        requiredMessages[2].style.display = 'none';
+
+        numValid += 1;
+    }
+
+    if (realForm.elements[3].checked === false && realForm.elements[4].checked === false) {
+        requiredMessageRadio.style.display = 'block';
+    }
+    else {
+        requiredMessageRadio.style.display = 'none';
+        numValid += 1;
+    }
+
+    return numValid === 4;
+}
+
+function clearInputs() {
+    realForm.elements[0].value = '';
+    realForm.elements[1].value = '';
+    realForm.elements[2].value = '';
+    realForm.elements[3].checked = false;
+    realForm.elements[4].checked = false;
+    requiredMessages[0].style.display = 'none';
+    requiredMessages[1].style.display = 'none';
+    requiredMessages[2].style.display = 'none';
+    requiredMessageRadio.style.display = 'none';
+}
 
 function addBookToLibrary(userTitle, userAuthor, userNumPages, userRead) {
     myLibrary.push(new Book(userTitle, userAuthor, userNumPages, userRead));
@@ -39,30 +94,33 @@ function addBookToLibrary(userTitle, userAuthor, userNumPages, userRead) {
 function openForm() {
     formDiv.style.display = "block";
     mainContainer.style.filter = "blur(3px)";
+
 };
 
 function closeForm() {
-    realForm.elements[0].value = '';
-    realForm.elements[1].value = '';
-    realForm.elements[2].value = '';
-    realForm.elements[3].checked = false;
-    realForm.elements[4].checked = false;
+
+    clearInputs();
 
     formDiv.style.display = "none";
     mainContainer.style.filter = "";
 };
 
 function userAddBook() {
-    let formValues = realForm.elements;
-    userTitle = formValues[0].value;
-    userAuthor = formValues[1].value;
-    userNumPages = formValues[2].value;
-    userRead = formValues[3].checked ? true : false;
 
-    document.querySelector('div#books-container').innerHTML = '';
-    addBookToLibrary(userTitle, userAuthor, userNumPages, userRead);
-    displayBooks();
-    closeForm();
+    if (getNumValidInputs()) {
+
+        let formValues = realForm.elements;
+        userTitle = formValues[0].value;
+        userAuthor = formValues[1].value;
+        userNumPages = formValues[2].value;
+        userRead = formValues[3].checked ? true : false;
+
+        document.querySelector('div#books-container').innerHTML = '';
+        addBookToLibrary(userTitle, userAuthor, userNumPages, userRead);
+        displayBooks();
+        closeForm();
+
+    }
 }
 
 function displayBooks() {
@@ -104,7 +162,6 @@ function displayBooks() {
             for (let i = 0; i < myLibrary.length; ++i) {
                 if (bookId === i) {
                     myLibrary.splice(i, 1);
-                    console.log("removed at index" + String(i));
                     break;
                 }
             }

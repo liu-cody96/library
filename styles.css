@@ -76,8 +76,8 @@ body {
     left: 45%;
     top: 5%;
     transform: translate(-50%, 5%);
-    border: 3px solid #999999;
-
+    border: 1px solid #999999;
+    border-radius: 2px;
   }
   .formContainer {
     max-width: 300px;
@@ -87,10 +87,12 @@ body {
   }
   .formContainer input[type=text],
   .formContainer input[type=number],
-  .formContainer input[type=checkbox] {
+  .formContainer input[type=checkbox]
+  .formContainer input[type=radio] {
     width: 100%;
     padding: 15px;
-    margin: 5px 0 20px 0;
+    margin-top: 5px;
+    margin-bottom: 20px;
     border: none;
     background: #eee;
   }
@@ -106,9 +108,21 @@ body {
     color: #fff;
     cursor: pointer;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: 10px;
     opacity: 0.8;
+  }
+
+  .formContainer .err-msg {
+    display: none;
+    color: red;
+    margin-top: -16px;
+  }
+
+  .formContainer .err-msg-radio {
+    display: none;
+    color: red;
+    margin-bottom: -16px;
   }
 
   .close {
