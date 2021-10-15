@@ -31,11 +31,20 @@ const mainContainer = document.querySelector(".main-container");
 
 const requiredMessages = document.querySelectorAll(".err-msg");
 const requiredMessageRadio = document.querySelector(".err-msg-radio");
+
+if (storageAvailable('localStorage')) {
+
+    // populate and display previously stored library
+    populateLibraryFromLocalStorage();
+    displayBooks();
+
+}
+
 ////////////////////////////////
 
 // function declarations and implementations /////
 
-function getNumValidInputs() {
+function allInputsValid() {
     let numValid = 0;
 
     if (realForm.elements[0].value === '') {
@@ -107,7 +116,7 @@ function closeForm() {
 
 function userAddBook() {
 
-    if (getNumValidInputs()) {
+    if (allInputsValid()) {
 
         let formValues = realForm.elements;
         userTitle = formValues[0].value;
@@ -117,6 +126,7 @@ function userAddBook() {
 
         document.querySelector('div#books-container').innerHTML = '';
         addBookToLibrary(userTitle, userAuthor, userNumPages, userRead);
+        saveLibrarytoLocalStorage();
         displayBooks();
         closeForm();
 
@@ -138,9 +148,11 @@ function displayBooks() {
         const numBookPages = document.createElement("p");
         numBookPages.innerHTML = "Length: " + String(book.numPages) + " pages";
         const readStatus = document.createElement("button");
-        readStatus.innerHTML = book.read ? "Mark as Unread" : "Mark as Read";
+        readStatus.className = "read-status";
+        readStatus.innerHTML = book.read ? "Read" : "Unread";
         const removeButton = document.createElement("button");
         removeButton.innerHTML = "Remove";
+        removeButton.className = "remove-button";
 
         /* add book element to HTML */
         bookElement.appendChild(title);
@@ -153,7 +165,8 @@ function displayBooks() {
         /* toggle readStatus whenever button is clicked */
         readStatus.addEventListener('click', () => {
             book.changeReadStatus();
-            readStatus.innerHTML = book.read ? "Mark as Unread" : "Mark as Read";
+            saveLibrarytoLocalStorage();
+            readStatus.innerHTML = book.read ? "Read" : "Unread";
         });
 
         /* logic for removing a book when the remove button is clicked */
@@ -162,6 +175,7 @@ function displayBooks() {
             for (let i = 0; i < myLibrary.length; ++i) {
                 if (bookId === i) {
                     myLibrary.splice(i, 1);
+                    saveLibrarytoLocalStorage();
                     break;
                 }
             }
@@ -180,4 +194,45 @@ function displayBooks() {
         ++currId;
     }
 }
+
+/***** function to check if localStorage is available in the current web browser. *****/
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
+/*** above code directly copy and pasted from https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API ***/
+
+function saveLibrarytoLocalStorage() {
+    localStorage.setItem('library', JSON.stringify(myLibrary));
+}
+
+function populateLibraryFromLocalStorage() {
+    if (localStorage.getItem('library')) {
+        let bookData = JSON.parse(localStorage.getItem('library'));
+        for (let book of bookData) {
+            addBookToLibrary(book.title, book.author, Number(book.numPages), Boolean(book.read));
+        }
+    }
+}
+
 ///////////////////////////////////////////////

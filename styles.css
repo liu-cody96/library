@@ -17,6 +17,17 @@ body {
   padding-bottom: 10px;
 }
 
+
+.read-status {
+  padding: 5px;
+}
+
+
+.remove-button {
+  padding: 5px;
+  margin-left: 25px;
+}
+
 .page-display {
   display: flex;
   flex-direction: column;
@@ -32,7 +43,7 @@ body {
 }
 
 .main-container .status-bar {
-  background-color: #6489A5;
+  background-color: #6e89ba;
   padding: 15px;
 }
 
@@ -49,6 +60,10 @@ body {
   }
 
   div.book-card {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    padding-top: -10px;
+    background-image: linear-gradient(to bottom right, #EAF2F8, #6e89ba);
     background-color: #EAF2F8;
   }
 
